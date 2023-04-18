@@ -18,7 +18,9 @@ import argparse
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def upscale_audio(input_folder, output_folder, ckpt_path='rpsmai_diffusion_23pop_ins_v1.ckpt', sampler='adaptive', steps=12, noise_level=0.6, chunk_length=131072, sample_rate=44100):
+def upscale_audio(input_folder, output_folder, ckpt_path='rpsmai_diffusion_23pop_ins_v1.ckpt', sampler='adaptive', steps=12, noise_level=0.6, chunk_mul=4, sample_rate=44100):
+    chunk_length = 32768 * chunk_mul
+    print("Chunk Length: ", chunk_length)
     # Configurable models and cache folders.
     modelsfolder = os.path.realpath('models/')
     workingpath = os.path.realpath('cache/')
@@ -45,9 +47,20 @@ def upscale_audio(input_folder, output_folder, ckpt_path='rpsmai_diffusion_23pop
         # loop folder
 
     for i, input_file in enumerate(os.listdir(input_folder)):
+      #if input_file.endswith(".mp3"):
+      #  if os.path.exists(f'{input_file.split(".")[0]}.wav'):
+      #    input_file = f'{input_file.split(".")[0]}.wav'
+      #  else:
+      #    #convert to wav
+      #    print(f'Converting {input_file} to wav...')
+      #    sound = AudioSegment.from_mp3(os.path.join(input_folder, input_file))
+      #    sound.export(os.path.join(input_folder, f'{input_file.split(".")[0]}.wav'), format="wav")
+      #    input_file = f'{input_file.split(".")[0]}.wav'
+
+
       input_file = os.path.join(input_folder, input_file)
       print(f'Upsampling {input_file}... ({i+1}/{len(os.listdir(input_folder))})')
-      myaudio = AudioSegment.from_file(input_file, "wav") 
+      myaudio = AudioSegment.from_file(input_file) 
       chunk_length_ms = ((chunk_length) / sample_rate) *1000 * 1 # pydub calculates in millisec 
       chunks = make_chunks(myaudio,chunk_length_ms) #Make chunks of 65535 samples
       print(f'Made {len(chunks)} chunks of {chunk_length_ms} ms each')
@@ -100,7 +113,7 @@ if __name__ == '__main__':
   parser.add_argument('-s', '--sampler', help='Sampler', required=False, default='adaptive')
   parser.add_argument('-t', '--steps', help='Steps', required=False, default='12')
   parser.add_argument('-n', '--noise', help='Noise Level', required=False, default='0.6')
-  parser.add_argument('-l', '--length', help='Chunk Length', required=False, default='131072')
+  parser.add_argument('-l', '--length', help='Chunk Length Multiplier', required=False, default='4')
   parser.add_argument('-r', '--rate', help='Sample Rate', required=False, default='44100')
   args = parser.parse_args()
-  upscale_audio(args.input, args.output, ckpt_path=args.ckpt, sampler=args.sampler, steps=int(args.steps), noise_level=float(args.noise))
+  upscale_audio(args.input, args.output, ckpt_path=args.ckpt, sampler=args.sampler, steps=int(args.steps), noise_level=float(args.noise), chunk_mul=int(args.length), sample_rate=int(args.rate))
