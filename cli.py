@@ -87,8 +87,8 @@ def upscale_audio(input_folder, output_folder, ckpt_path='rpsmai_diffusion_23pop
   
       for filename in os.listdir(proc_folder):
         os.remove(os.path.join(proc_folder, filename))
-  
-      output_file = os.path.join(output_folder, os.path.splitext(input_file)[0]+"_upsc.wav")
+      output_file = os.path.join(output_folder, os.path.splitext(os.path.basename(input_file))[0]+"_upsc.wav")
+      print(output_file)
       finalupscoutput.export(output_file, format="wav")
 
 if __name__ == '__main__':
