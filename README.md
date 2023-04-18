@@ -39,4 +39,7 @@ python cli.py ->
                         Amount of diffusion steps to take
   -n NOISE, --noise NOISE
                         Noise Level (0-1) to add to process diffusion over
+  -l LENGTH, --length LENGTH
+                        Chunk Length
+  -r RATE, --rate RATE  Sample Rate
 

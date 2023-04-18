@@ -100,5 +100,7 @@ if __name__ == '__main__':
   parser.add_argument('-s', '--sampler', help='Sampler', required=False, default='adaptive')
   parser.add_argument('-t', '--steps', help='Steps', required=False, default='12')
   parser.add_argument('-n', '--noise', help='Noise Level', required=False, default='0.6')
+  parser.add_argument('-l', '--length', help='Chunk Length', required=False, default='131072')
+  parser.add_argument('-r', '--rate', help='Sample Rate', required=False, default='44100')
   args = parser.parse_args()
   upscale_audio(args.input, args.output, ckpt_path=args.ckpt, sampler=args.sampler, steps=int(args.steps), noise_level=float(args.noise))
