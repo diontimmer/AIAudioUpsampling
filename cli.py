@@ -1,8 +1,8 @@
 import os
 
-from sd_models import *
-from sd_sampling import *
-from sd_util import *
+from AIAU_models import *
+from AIAU_sampling import *
+from AIAU_util import *
 
 import gc
 import torch
@@ -50,7 +50,7 @@ def upscale_audio(input_file, output_file, ckpt_path='rpsmai_diffusion_musdb18hq
         chunk.export(chunk_name, format="wav")
 
     # create model fn
-    model_fn = create_model(ckpt_path, sample_rate=sample_rate, sample_size=sample_size)
+    model_fn = create_model(ckpt_path, sample_rate=sample_rate, sample_size=chunk_length)
     
     for filename in sorted(os.listdir(proc_folder)):
       if not filename.endswith("_upsc.wav") and not filename.endswith("_upsc-final.wav") and not filename.endswith("_upsc-final2.wav") and not filename.endswith("item_0.wav"):
