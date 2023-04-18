@@ -1,0 +1,6 @@
+ipython
+einops
+audio-diffusion-pytorch==0.0.96
+pydub
+k-diffusion
+v-diffusion-pytorch
